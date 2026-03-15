@@ -4,4 +4,6 @@
 
 [![Documentation](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/JohannesvKL/213f77ed587639b505f8f25529ca9c9e/raw/doccheck.json)](./documentationcheck.json)
 
-This is the read-me of the RNAseq demo repo. 
+This is the read-me of the RNAseq demo repo.
+
+Included is an roCRATE. 
