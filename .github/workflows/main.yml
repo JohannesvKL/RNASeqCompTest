@@ -31,14 +31,14 @@ jobs:
       - name: Parse Reproducibility Result
         id: reproducibility
         run: |
-          if [ ! -f comparison_result.json ]; then
+          if [ ! -f rnacompcrate/comparison_result.json ]; then
             echo "ERROR: comparison_result.json not found"
             exit 1
           fi
       
           READ=$(python -c "
           import json, sys
-          d = json.load(open('comparison_result.json'))
+          d = json.load(open('rnacompcrate/comparison_result.json'))
           identical = d['files_matching']
           total = d['files_compared']
           pct = int((identical / total) * 100) if total > 0 else 0
@@ -63,12 +63,12 @@ jobs:
       - name: Parse Doc Check Result
         id: doccheck
         run: |
-          if [ ! -f documentationcheck.json ]; then
-            echo "ERROR: documentationcheck.json not found"
+          if [ ! -f rnacompcrate/documentationcheck.json ]; then
+            echo "ERROR: rnacompcrate/documentationcheck.json not found"
             exit 1
           fi
-          AI_USE=$(python -c "import json,sys; d=json.load(open('documentationcheck.json')); sys.stdout.write(str(d['LLM-usage']).lower())")
-          DOCMATCH=$(python -c "import json,sys; d=json.load(open('documentationcheck.json')); sys.stdout.write(str(int(d['overall_assessment']['score'])))")
+          AI_USE=$(python -c "import json,sys; d=json.load(open('rnacompcrate/documentationcheck.json')); sys.stdout.write(str(d['LLM-usage']).lower())")
+          DOCMATCH=$(python -c "import json,sys; d=json.load(open('rnacompcrate/documentationcheck.json')); sys.stdout.write(str(int(d['overall_assessment']['score'])))")
           if [ "$DOCMATCH" -ge 5 ] && [ "$AI_USE" == "true" ]; then
             echo "label_doc=Documentation Checked + LLM Reviewed" >> $GITHUB_OUTPUT
             echo "message_doc=Yes"                               >> $GITHUB_OUTPUT
