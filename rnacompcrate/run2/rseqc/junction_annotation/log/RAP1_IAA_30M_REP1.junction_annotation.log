@@ -1,0 +1,18 @@
+Reading reference bed file:  genes.filtered.bed  ...  Done
+Load BAM file ...  Done
+
+===================================================================
+Total splicing  Events:	588
+Known Splicing Events:	317
+Partial Novel Splicing Events:	0
+Novel Splicing Events:	214
+Filtered Splicing Events:	57
+
+Total splicing  Junctions:	64
+Known Splicing Junctions:	3
+Partial Novel Splicing Junctions:	0
+Novel Splicing Junctions:	61
+
+===================================================================
+Create BED file ...
+Create Interact file ...

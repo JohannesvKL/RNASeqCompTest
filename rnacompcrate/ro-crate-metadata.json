@@ -1,0 +1,126 @@
+{
+    "@context": "https://w3id.org/ro/crate/1.1/context",
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "dateCreated": "2026-03-15T12:50:56.090098+00:00",
+            "datePublished": "2026-03-15T12:50:56+00:00",
+            "description": "Comparison of /Users/johannes/Desktop/fonda_checker/Code/nextflow_checker/rnaseq_results/results_local/1/star_salmon/ vs /Users/johannes/Desktop/fonda_checker/Code/nextflow_checker/rnaseq_results/results_fu/1/star_salmon/ - FAIL",
+            "hasPart": [
+                {
+                    "@id": "config.yml"
+                },
+                {
+                    "@id": "comparison_result.json"
+                },
+                {
+                    "@id": "run1/"
+                },
+                {
+                    "@id": "run2/"
+                },
+                {
+                    "@id": "documentationcheck.json"
+                }
+            ],
+            "instrument": [
+                {
+                    "@id": "#tool-scikit-image-ssim"
+                },
+                {
+                    "@id": "#tool-sha256-checksum"
+                },
+                {
+                    "@id": "#tool-datacompy"
+                },
+                {
+                    "@id": "#tool-pysam"
+                }
+            ],
+            "mentions": [
+                {
+                    "@id": "#overall-comparison"
+                }
+            ],
+            "name": "Workflow Run Comparison"
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": {
+                "@id": "https://w3id.org/ro/crate/1.1"
+            }
+        },
+        {
+            "@id": "config.yml",
+            "@type": "File",
+            "description": "Unified comparator and file pairs configuration",
+            "name": "Comparison configuration"
+        },
+        {
+            "@id": "comparison_result.json",
+            "@type": "File",
+            "description": "Full per-file comparison results",
+            "encodingFormat": "application/json",
+            "name": "Comparison result"
+        },
+        {
+            "@id": "run1/",
+            "@type": "Dataset",
+            "name": "Run 1"
+        },
+        {
+            "@id": "run2/",
+            "@type": "Dataset",
+            "name": "Run 2"
+        },
+        {
+            "@id": "#tool-scikit-image-ssim",
+            "@type": "SoftwareApplication",
+            "applicationCategory": "Image comparison",
+            "name": "scikit-image SSIM",
+            "url": "https://scikit-image.org/"
+        },
+        {
+            "@id": "#tool-sha256-checksum",
+            "@type": "SoftwareApplication",
+            "applicationCategory": "Binary comparison",
+            "name": "SHA256 Checksum",
+            "version": "hashlib"
+        },
+        {
+            "@id": "#tool-datacompy",
+            "@type": "SoftwareApplication",
+            "applicationCategory": "Tabular data comparison",
+            "name": "DataComPy",
+            "url": "https://github.com/capitalone/datacompy",
+            "version": "0.19.2"
+        },
+        {
+            "@id": "#tool-pysam",
+            "@type": "SoftwareApplication",
+            "applicationCategory": "BAM/SAM file comparison",
+            "name": "pysam",
+            "url": "https://pysam.readthedocs.io/",
+            "version": "0.23.3"
+        },
+        {
+            "@id": "#overall-comparison",
+            "@type": "PropertyValue",
+            "description": "195/263 files matched",
+            "name": "Overall Comparison Result",
+            "value": "FAIL"
+        },
+        {
+            "@id": "documentationcheck.json",
+            "@type": "File",
+            "description": "A json file containing an analysis of documentation + metadata of RNAseq",
+            "encodingFormat": "json",
+            "name": "Result of DocChecker on RNAseq"
+        }
+    ]
+}

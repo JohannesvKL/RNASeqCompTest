@@ -1,0 +1,2 @@
+RAP1_IAA_30M_REP1 - dupRadar Int (duprate at low read counts): 0.000221180933722868 
+RAP1_IAA_30M_REP1 - dupRadar Sl (progression of the duplication rate): 6.21058410638996

@@ -1,0 +1,10 @@
+{
+    "salmon_version": "1.10.3",
+    "geneMap": "genes.filtered.gtf",
+    "threads": "6",
+    "libType": "SR",
+    "targets": "genome.transcripts.fa",
+    "alignments": "RAP1_UNINDUCED_REP2.Aligned.toTranscriptome.out.bam",
+    "output": "RAP1_UNINDUCED_REP2",
+    "auxDir": "aux_info"
+}
