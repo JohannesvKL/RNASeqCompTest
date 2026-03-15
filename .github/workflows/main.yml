@@ -1,0 +1,116 @@
+name: Verify Reproducibility
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  reproducibility-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-datacompy-pandas
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install Dependencies
+        run: pip install datacompy pandas
+
+      # --- Badge 1: Reproducibility (reads comparison_result.json) ---
+      - name: Parse Reproducibility Result
+        id: reproducibility
+        run: |
+          if [ ! -f comparison_result.json ]; then
+            echo "ERROR: comparison_result.json not found"
+            exit 1
+          fi
+      
+          READ=$(python -c "
+          import json, sys
+          d = json.load(open('comparison_result.json'))
+          identical = d['files_matching']
+          total = d['files_compared']
+          pct = int((identical / total) * 100) if total > 0 else 0
+          sys.stdout.write(f'{pct},{identical},{total}')
+          ")
+          PCT=$(echo $READ | cut -d',' -f1)
+          IDENTICAL=$(echo $READ | cut -d',' -f2)
+          TOTAL=$(echo $READ | cut -d',' -f3)
+      
+          echo "label=Reproducible"                   >> $GITHUB_OUTPUT
+          echo "message=${IDENTICAL}/${TOTAL} files"  >> $GITHUB_OUTPUT
+      
+          if [ "$PCT" -ge 75 ]; then
+            echo "color=brightgreen" >> $GITHUB_OUTPUT
+          elif [ "$PCT" -ge 50 ]; then
+            echo "color=yellow"      >> $GITHUB_OUTPUT
+          else
+            echo "color=red"         >> $GITHUB_OUTPUT
+          fi
+
+      # --- Badge 2: Doc Check (reads test_results.json) ---
+      - name: Parse Doc Check Result
+        id: doccheck
+        run: |
+          if [ ! -f documentationcheck.json ]; then
+            echo "ERROR: documentationcheck.json not found"
+            exit 1
+          fi
+          AI_USE=$(python -c "import json,sys; d=json.load(open('documentationcheck.json')); sys.stdout.write(str(d['LLM-usage']).lower())")
+          DOCMATCH=$(python -c "import json,sys; d=json.load(open('documentationcheck.json')); sys.stdout.write(str(int(d['overall_assessment']['score'])))")
+          if [ "$DOCMATCH" -ge 5 ] && [ "$AI_USE" == "true" ]; then
+            echo "label_doc=Documentation Checked + LLM Reviewed" >> $GITHUB_OUTPUT
+            echo "message_doc=Yes"                               >> $GITHUB_OUTPUT
+            echo "color_doc=blue"                                 >> $GITHUB_OUTPUT
+          elif [ "$DOCMATCH" -ge 5 ]; then
+            echo "label_doc=Documentation Checked"               >> $GITHUB_OUTPUT
+            echo "message_doc=Yes"                               >> $GITHUB_OUTPUT
+            echo "color_doc=lightblue"                           >> $GITHUB_OUTPUT
+          else
+            echo "label_doc=Documentation Not Checked"           >> $GITHUB_OUTPUT
+            echo "message_doc=No"                                 >> $GITHUB_OUTPUT
+            echo "color_doc=red"                                  >> $GITHUB_OUTPUT
+          fi
+
+      - name: Debug Badge Outputs
+        if: always()
+        run: |
+          echo "=== Reproducibility ==="
+          echo "  label:   ${{ steps.reproducibility.outputs.label }}"
+          echo "  message: ${{ steps.reproducibility.outputs.message }}"
+          echo "  color:   ${{ steps.reproducibility.outputs.color }}"
+          echo "=== Doc Check ==="
+          echo "  label:   ${{ steps.doccheck.outputs.label_doc }}"
+          echo "  message: ${{ steps.doccheck.outputs.message_doc }}"
+          echo "  color:   ${{ steps.doccheck.outputs.color_doc }}"
+
+      - name: Update Reproducibility Badge Gist
+        uses: Schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: 7786526585e9b82094ea49f45818fe6b
+          filename: reproducibility.json
+          label: ${{ steps.reproducibility.outputs.label }}
+          message: ${{ steps.reproducibility.outputs.message }}
+          color: ${{ steps.reproducibility.outputs.color }}
+
+      - name: Update Doc Check Badge Gist
+        uses: Schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: 213f77ed587639b505f8f25529ca9c9e
+          filename: doccheck.json
+          label: ${{ steps.doccheck.outputs.label_doc }}
+          message: ${{ steps.doccheck.outputs.message_doc }}
+          color: ${{ steps.doccheck.outputs.color_doc }}
